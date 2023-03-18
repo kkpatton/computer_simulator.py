@@ -86,15 +86,25 @@ class ComputerSimulator():
 
         try:
             # Open named file
-            with open("program_1.txt", mode = "r") as f:
+            file_name = input('Enter the name of the file you would like to open:')
+            
+            # Open the file for reading
+            with open(file_name, mode = "r") as f:
+
+                # Read the contents of the file
                 contents = f.read()
-            # read each line
-            # and store in memory
+                
+                # Print the contents of the file    
+                print(contents)
+
+                # read each line
+                lines = f.readlines()
+
+                # and store in memory
                 count = 0
             for instruction_string in f.readlines():
                 self.memory[count] = int(instruction_string)
                 count += 1
-            import os 
             # Define the name of the file you want to limit input to
             file_name = "project_1.txt"
         except Exception as e:
@@ -153,9 +163,9 @@ class ComputerSimulator():
                 case self.HALT: self.halt()
                 case _: self.halt()
 
-    def dump_memory():
+    def dump_memory(self):
          counter = 0
-         for instruction in memory:
+         for instruction in self.memory:
              counter += 1
              if (counter % 11) == 0:
                  print()
