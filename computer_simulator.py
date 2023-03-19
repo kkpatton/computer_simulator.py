@@ -48,7 +48,7 @@ class ComputerSimulator():
         print('\n\n')
         print('\t\t Computer Simulator Menu')
         print('\n')
-        print('\t1. Load program from file.')
+        print('\t1. Load program from file')
         print('\t2. Enter program from keyboard')
         print('\t3. Load demo program')
         print('\t4. Run program')
@@ -61,8 +61,8 @@ class ComputerSimulator():
         Processes and executes menu commands.
         """
         # Get menu selection from user
-        user_input = input('Enter menu choice: ')
-        print(f'You entered: {user_input}')
+        user_input = input('Enter menu choice... ')
+        print(f'You entered... {user_input}')
 
         if not user_input:
             user_input = '0'
@@ -79,43 +79,56 @@ class ComputerSimulator():
             case self.RUN_PROGRAM: self.run_program()
             case self.DUMP_MEMORY: self.dump_memory()
             case self.QUIT: self.keep_going = False
-            case _: print(f'Invalid menu choice...{user_input[0]}')
+            case _: print(f'Invalid menu choice... {user_input[0]}')
 
 
     def load_program_from_file(self):
 
         try:
             # Open named file
-            file_name = input('Enter the name of the file you would like to open:')
+            file_name = input('Enter the name of the file you would like to open... ')
             
             # Open the file for reading
             with open(file_name, mode = "r") as f:
 
                 # Read the contents of the file
-                contents = f.read()
+                # contents = f.read()
                 
                 # Print the contents of the file    
-                print(contents)
-
+                # print(contents)
                 # read each line
-                lines = f.readlines()
+                # lines = f.readlines()
 
                 # and store in memory
                 count = 0
-            for instruction_string in f.readlines():
-                self.memory[count] = int(instruction_string)
-                count += 1
-            # Define the name of the file you want to limit input to
-            file_name = "project_1.txt"
+                for instruction_string in f.readlines():
+                    self.memory[count] = int(instruction_string)
+                    count += 1
+            
         except Exception as e:
-            print(f'Problem loading program into memory. {e}')
+            print(f'Problem loading program into memory... {e}')
 
     def enter_program_from_keyboard(self):
-         user_input = input("Enter some text: ")
-         print("You entered:", user_input)
+        print("Enter 'exit' when you would like to return to the main menu.")
+        self.memory = {}
+        count = 0
+        keep_going = True
 
+        while keep_going:
+            try:
+               instruction = input("Please enter an instruction: ")
+               if instruction.lower() == 'exit':
+                  keep_going = False
+               else:
+                  self.memory[count] = int(instruction)
+                  count += 1
+            except Exception as e:
+               print(f"Invalid instruction. Please try again. {e}")
+
+        return
+                   
     def load_demo_program(self):
-         print('Loading demo program')
+         print('Loading demo program...')
          self.memory[0] = 1007
          self.memory[1] = 1008
          self.memory[2] = 2007
@@ -127,7 +140,7 @@ class ComputerSimulator():
 
 
     def run_program(self):
-         print('running program...')
+         print('Running program...')
 
          self.run = True
          self.program_counter = 0
@@ -178,7 +191,7 @@ class ComputerSimulator():
         """Reads numeric input from console and stores it in
         memory location indicated by operand.
         """
-        user_input = input('Enter numeric value: ')
+        user_input = input('Enter numeric value... ')
 
         try:
             # Convert string input to floating point numeric value
@@ -208,32 +221,30 @@ class ComputerSimulator():
         self.memory[operand] = self.accumulator
 
     def add(self, operand):
-        self.accumulator = self.memory[operand]
+        self.accumulator += self.memory[operand]
 
     def sub(self, operand):
-        self.accumulator = self.memory[operand]
+        self.accumulator -= self.memory[operand]
 
     def mul(self, operand):
-        self.accumulator = self.memory[operand]
+        self.accumulator *= self.memory[operand]
 
     def div(self, operand):
-        self.accumulator = self.memory[operand]
+        self.accumulator /= self.memory[operand]
 
     def branch(self, operand):
         self.program_counter = operand
 
     def branch_neg(self, operand):
-        self.program_counter = operand
+        if self.accumulator < 0:
+            self.program_counter = operand
 
     def branch_zero(self, operand):
-        self.program_counter = operand
+        if self.accumulator == 0:
+            self.program_counter = operand
 
     def halt(self):
         self.run = False
-
-    
-    def dump_memory(self):
-        print(self.memory)
 
     def launch_application(self):
         while self.keep_going:
